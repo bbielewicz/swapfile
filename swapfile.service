@@ -1,0 +1,13 @@
+[Unit]
+Description=Swap File Manager
+Requires=swap.target
+After=swap.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/swapfile on
+ExecStop=/sbin/swapfile off
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

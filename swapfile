@@ -1,0 +1,61 @@
+#!/bin/sh
+set -e
+
+CONFIG_FILE=/etc/swapfile.conf
+
+# Load configuration
+if [ -f $CONFIG_FILE ] ; then
+  . $CONFIG_FILE
+else
+  echo "configuration file $CONFIG_FILE not found"
+  exit 1
+fi
+
+# Parse variables
+if [ "$SWAPFILE" = "" ] ; then
+  echo "variable SWAPFILE is not set"
+  exit 1
+fi
+if [ "$SWAPSIZE" = "" ] ; then
+  echo "variable SWAPSIZE is not set"
+  exit 1
+fi
+
+# Execute
+case $1 in
+  init)
+    if [ -f $SWAPFILE ]; then
+      echo "swap file is already created"
+      exit 1
+    fi
+    dd if=/dev/zero of=$SWAPFILE bs=1048576 count=$SWAPSIZE
+    chown root:root $SWAPFILE
+    chmod 0600 $SWAPFILE
+    mkswap $SWAPFILE
+    ;;
+  on)
+    if [ ! -f $SWAPFILE ]; then
+      echo "swap file not found"
+      exit 1
+    fi
+    if [ -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+      swapon $SWAPFILE
+    fi
+    ;;
+  off)
+    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+      swapoff $SWAPFILE
+    fi
+    ;;
+  remove)
+    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+      echo "swap file is in use"
+      exit 1
+    fi
+    rm -f $SWAPFILE
+    ;;
+  *)
+    echo "usage: $0 {init|on|off|remove}"
+    ;;
+esac
+exit 0

@@ -4,7 +4,7 @@ set -e
 CONFIG_FILE=/etc/swapfile.conf
 
 # Load configuration
-if [ -f $CONFIG_FILE ] ; then
+if [ -f $CONFIG_FILE ]; then
   . $CONFIG_FILE
 else
   echo "configuration file $CONFIG_FILE not found"
@@ -12,11 +12,11 @@ else
 fi
 
 # Parse variables
-if [ "$SWAPFILE" = "" ] ; then
+if [ "$SWAPFILE" = "" ]; then
   echo "variable SWAPFILE is not set"
   exit 1
 fi
-if [ "$SWAPSIZE" = "" ] ; then
+if [ "$SWAPSIZE" = "" ]; then
   echo "variable SWAPSIZE is not set"
   exit 1
 fi
@@ -38,17 +38,17 @@ case $1 in
       echo "swap file not found"
       exit 1
     fi
-    if [ -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+    if [ -z "$(swapon --show | grep ^$SWAPFILE)" ]; then
       swapon $SWAPFILE
     fi
     ;;
   off)
-    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ]; then
       swapoff $SWAPFILE
     fi
     ;;
   remove)
-    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ] ; then
+    if [ ! -z "$(swapon --show | grep ^$SWAPFILE)" ]; then
       echo "swap file is in use"
       exit 1
     fi

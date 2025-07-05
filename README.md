@@ -4,13 +4,7 @@ A simple script to manage the swap file.
 
 ## Installation
 ```bash
-sudo cp swapfile /sbin/
-sudo chmod 755 /sbin/swapfile
-sudo cp swapfile.conf /etc/
-sudo chmod 644 /etc/swapfile.conf
-sudo cp swapfile.service /lib/systemd/system/
-sudo chmod 644 /lib/systemd/system/swapfile.service
-sudo systemctl daemon-reload
+sudo make install
 ```
 ## Initialization and start-up
 ```bash
